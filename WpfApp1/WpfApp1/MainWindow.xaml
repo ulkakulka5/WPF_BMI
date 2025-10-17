@@ -1,0 +1,29 @@
+﻿<Window x:Class="BMIApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BMI Kalkulator" Height="600" Width="400"
+        Background="#FFF0F5">
+    <StackPanel Margin="20" VerticalAlignment="Center">
+        <TextBlock Text="BMI Kalkulator" FontSize="20" FontWeight="Bold" Foreground="HotPink" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        
+        <Label Content="Waga (kg)" Foreground="DeepPink"/>
+        <TextBox x:Name="WeightKgTextBox" Margin="0,5"/>
+
+        <Label Content="Waga (funty)" Foreground="DeepPink"/>
+        <TextBox x:Name="WeightLbTextBox" Margin="0,5"/>
+
+        
+        <Label Content="Wzrost (cm)" Foreground="DeepPink"/>
+        <TextBox x:Name="HeightCmTextBox" Margin="0,5"/>
+
+        <Label Content="Wzrost (cale)" Foreground="DeepPink"/>
+        <TextBox x:Name="HeightInchesTextBox" Margin="0,5"/>
+
+        <Label Content="Wzrost (stopy)" Foreground="DeepPink"/>
+        <TextBox x:Name="HeightFeetTextBox" Margin="0,5"/>
+
+        <Button Content="Oblicz BMI" Click="CalculateBMI_Click" Background="HotPink" Foreground="White" Margin="0,10"/>
+        <TextBlock x:Name="ResultTextBlock" FontSize="16" Foreground="DeepPink" TextAlignment="Center"/>
+    </StackPanel>
+</Window>
