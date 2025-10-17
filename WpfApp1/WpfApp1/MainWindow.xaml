@@ -1,4 +1,4 @@
-﻿<Window x:Class="BMIApp.MainWindow"
+<Window x:Class="BMIApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BMI Kalkulator" Height="600" Width="400"
@@ -25,5 +25,7 @@
 
         <Button Content="Oblicz BMI" Click="CalculateBMI_Click" Background="HotPink" Foreground="White" Margin="0,10"/>
         <TextBlock x:Name="ResultTextBlock" FontSize="16" Foreground="DeepPink" TextAlignment="Center"/>
+        <TextBlock x:Name="TipTextBlock" FontSize="14" Foreground="DeepPink" TextAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap"/>
+
     </StackPanel>
 </Window>
