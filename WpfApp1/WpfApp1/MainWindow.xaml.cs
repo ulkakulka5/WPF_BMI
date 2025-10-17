@@ -15,28 +15,47 @@ namespace BMIApp
             double bmi = 0;
 
            
+           
             double weightKg = 0;
             double weightLb = 0;
 
-            if (!string.IsNullOrWhiteSpace(WeightKgTextBox.Text))
+            if (!string.IsNullOrWhiteSpace(WeightKgTextBox.Text) && !string.IsNullOrWhiteSpace(WeightLbTextBox.Text))
+            {
+                ResultTextBlock.Text = "Podaj tylko jedną wartość wagi.";
+            }
+            else if(!string.IsNullOrWhiteSpace(WeightKgTextBox.Text) && string.IsNullOrWhiteSpace(WeightLbTextBox.Text))
+            {
                 double.TryParse(WeightKgTextBox.Text, out weightKg);
-
-            if (!string.IsNullOrWhiteSpace(WeightLbTextBox.Text))
+            }
+            else if (!string.IsNullOrWhiteSpace(WeightLbTextBox.Text))
+            {
                 double.TryParse(WeightLbTextBox.Text, out weightLb);
+            }
+               
 
             
             double heightCm = 0;
             double heightInches = 0;
             double heightFeet = 0;
 
-            if (!string.IsNullOrWhiteSpace(HeightCmTextBox.Text))
+            if (!string.IsNullOrWhiteSpace(HeightCmTextBox.Text) && !string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && !string.IsNullOrWhiteSpace(HeightFeetTextBox.Text))
+            {
+                ResultTextBlock.Text = "Podaj tylko jedną wartość wzrostu.";
+            }
+            else if (!string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && string.IsNullOrWhiteSpace(HeightFeetTextBox.Text))
+            {
                 double.TryParse(HeightCmTextBox.Text, out heightCm);
-
-            if (!string.IsNullOrWhiteSpace(HeightInchesTextBox.Text))
+            }
+            else if (string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && !string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && string.IsNullOrWhiteSpace(HeightFeetTextBox.Text))
+            {
                 double.TryParse(HeightInchesTextBox.Text, out heightInches);
 
-            if (!string.IsNullOrWhiteSpace(HeightFeetTextBox.Text))
+            }
+            else if (string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && string.IsNullOrWhiteSpace(HeightInchesTextBox.Text) && !string.IsNullOrWhiteSpace(HeightFeetTextBox.Text))
+            {
                 double.TryParse(HeightFeetTextBox.Text, out heightFeet);
+            }
+                
 
             
             if (weightKg > 0)
