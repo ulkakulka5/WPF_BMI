@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 
 namespace BMIApp
@@ -14,7 +14,7 @@ namespace BMIApp
         {
             double bmi = 0;
 
-            
+           
             double weightKg = 0;
             double weightLb = 0;
 
@@ -24,7 +24,7 @@ namespace BMIApp
             if (!string.IsNullOrWhiteSpace(WeightLbTextBox.Text))
                 double.TryParse(WeightLbTextBox.Text, out weightLb);
 
-           
+            
             double heightCm = 0;
             double heightInches = 0;
             double heightFeet = 0;
@@ -41,7 +41,7 @@ namespace BMIApp
             
             if (weightKg > 0)
             {
-                double heightM = 0;
+                double heightM = 0; //na metry bo podane kg
 
                 if (heightCm > 0)
                     heightM = heightCm / 100;
@@ -52,6 +52,7 @@ namespace BMIApp
                 else
                 {
                     ResultTextBlock.Text = "Podaj wzrost.";
+                    TipTextBlock.Text = "";
                     return;
                 }
 
@@ -70,29 +71,65 @@ namespace BMIApp
                 else
                 {
                     ResultTextBlock.Text = "Podaj wzrost.";
+                    TipTextBlock.Text = "";
                     return;
                 }
 
-                bmi = (weightLb / (heightIn * heightIn)) * 703;
+                bmi = (weightLb / (heightIn * heightIn)) * 703; //na inch bo podane lb
             }
             else
             {
                 ResultTextBlock.Text = "Podaj wagę.";
+                TipTextBlock.Text = "";
+                return;
+            }
+
+            
+            if ((weightKg > 0 && (weightKg < 25 || weightKg > 200)) ||
+                (weightLb > 0 && (weightLb < 55 || weightLb > 440)))
+            {
+                ResultTextBlock.Text = "Waga poza zakresem.";
+                TipTextBlock.Text = "";
+                return;
+            }
+
+            if ((heightCm > 0 && (heightCm < 100 || heightCm > 250)) ||
+                (heightInches > 0 && (heightInches < 39 || heightInches > 98)) ||
+                (heightFeet > 0 && (heightFeet < 3.3 || heightFeet > 8.2)))
+            {
+                ResultTextBlock.Text = "Wzrost poza zakresem.";
+                TipTextBlock.Text = "";
                 return;
             }
 
             
             string category = "";
-            if (bmi < 18.5)
-                category = "Niedowaga";
-            else if (bmi < 25)
-                category = "Waga prawidłowa";
-            else if (bmi < 30)
-                category = "Nadwaga";
-            else
-                category = "Otyłość";
+            string suggestion = "";
 
-            ResultTextBlock.Text = $"Twoje BMI wynosi: {bmi:F2} — {category}";
+            if (bmi < 18.5)
+            {
+                category = "Niedowaga";
+                suggestion = "Zadbaj o zbilansowaną dietę i konsultuj się z dietetykiem.";
+            }
+            else if (bmi < 25)
+            {
+                category = "Waga prawidłowa";
+                suggestion = "Tak dalej! Jest OK.";
+            }
+            else if (bmi < 30)
+            {
+                category = "Nadwaga";
+                suggestion = "Zwróć uwagę na aktywność fizyczną i ogranicz cukry.";
+            }
+            else
+            {
+                category = "Otyłość";
+                suggestion = "Rozważ zwiększenie aktywności i zmianę nawyków żywieniowych.";
+            }
+
+            
+            ResultTextBlock.Text = $"BMI: {bmi:F2} - {category}";
+            TipTextBlock.Text = suggestion;
         }
     }
 }
