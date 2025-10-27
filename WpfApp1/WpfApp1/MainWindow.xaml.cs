@@ -12,126 +12,78 @@ namespace BMIApp
 
         private void CalculateBMI_Click(object sender, RoutedEventArgs e)
         {
-            double bmi = 0;
             double weightKg = 0, weightLb = 0;
             double heightCm = 0, heightInches = 0, heightFeet = 0;
+            double waist = 0, hips = 0;
+            int age = 0;
 
-           
-            int weightInputs = 0;
-            if (!string.IsNullOrWhiteSpace(WeightKgTextBox.Text)) weightInputs++;
-            if (!string.IsNullOrWhiteSpace(WeightLbTextBox.Text)) weightInputs++;
-
-            if (weightInputs != 1)
-            {
-                ResultTextBlock.Text = "Podaj tylko jedną wartość wagi.";
-                TipTextBlock.Text = "";
-                return;
-            }
-
-           
-            int heightInputs = 0;
-            if (!string.IsNullOrWhiteSpace(HeightCmTextBox.Text)) heightInputs++;
-            if (!string.IsNullOrWhiteSpace(HeightInchesTextBox.Text)) heightInputs++;
-            if (!string.IsNullOrWhiteSpace(HeightFeetTextBox.Text)) heightInputs++;
-
-            if (heightInputs != 1)
-            {
-                ResultTextBlock.Text = "Podaj tylko jedną wartość wzrostu.";
-                TipTextBlock.Text = "";
-                return;
-            }
-
-            
             double.TryParse(WeightKgTextBox.Text, out weightKg);
             double.TryParse(WeightLbTextBox.Text, out weightLb);
             double.TryParse(HeightCmTextBox.Text, out heightCm);
             double.TryParse(HeightInchesTextBox.Text, out heightInches);
             double.TryParse(HeightFeetTextBox.Text, out heightFeet);
+            double.TryParse(WaistCmTextBox.Text, out waist);
+            double.TryParse(HipsCmTextBox.Text, out hips);
+            int.TryParse(AgeTextBox.Text, out age);
 
-            
-            if ((weightKg > 0 && (weightKg < 25 || weightKg > 200)) ||
-                (weightLb > 0 && (weightLb < 55 || weightLb > 440)))
-            {
-                ResultTextBlock.Text = "Waga poza zakresem.";
-                TipTextBlock.Text = "";
-                return;
-            }
+            string gender = "";
+            if (FemaleRadioButton.IsChecked == true)
+                gender = "Kobieta";
+            else if (MaleRadioButton.IsChecked == true)
+                gender = "Mężczyzna";
 
-          
-            if ((heightCm > 0 && (heightCm < 100 || heightCm > 250)) ||
-                (heightInches > 0 && (heightInches < 39 || heightInches > 98)) ||
-                (heightFeet > 0 && (heightFeet < 3.3 || heightFeet > 8.2)))
-            {
-                ResultTextBlock.Text = "Wzrost poza zakresem.";
-                TipTextBlock.Text = "";
-                return;
-            }
+            double heightM = heightCm > 0 ? heightCm / 100 :
+                             heightInches > 0 ? heightInches * 0.0254 :
+                             heightFeet > 0 ? heightFeet * 0.3048 : 0;
 
-            
-            if (weightKg > 0)
-            {
-                double heightM = heightCm > 0 ? heightCm / 100 :
-                                 heightInches > 0 ? heightInches * 0.0254 :
-                                 heightFeet > 0 ? heightFeet * 0.3048 : 0;
-
-                if (heightM == 0)
-                {
-                    ResultTextBlock.Text = "Podaj wzrost.";
-                    TipTextBlock.Text = "";
-                    return;
-                }
-
+            double bmi = 0;
+            if (weightKg > 0 && heightM > 0)
                 bmi = weightKg / (heightM * heightM);
-            }
-            else if (weightLb > 0)
-            {
-                double heightIn = heightCm > 0 ? heightCm / 2.54 :
-                                  heightInches > 0 ? heightInches :
-                                  heightFeet > 0 ? heightFeet * 12 : 0;
+            else if (weightLb > 0 && heightM > 0)
+                bmi = (weightLb / 2.20462) / (heightM * heightM);
 
-                if (heightIn == 0)
-                {
-                    ResultTextBlock.Text = "Podaj wzrost.";
-                    TipTextBlock.Text = "";
-                    return;
-                }
+            string bmiCategory = "";
+            string tip = "";
 
-                bmi = (weightLb / (heightIn * heightIn)) * 703;
-            }
+            if (bmi < 18.5) { bmiCategory = "Niedowaga"; tip = "Zadbaj o zbilansowaną dietę."; }
+            else if (bmi < 25) { bmiCategory = "Waga prawidłowa"; tip = "Tak trzymaj!"; }
+            else if (bmi < 30) { bmiCategory = "Nadwaga"; tip = "Zwiększ aktywność fizyczną."; }
+            else { bmiCategory = "Otyłość"; tip = "Skonsultuj się z dietetykiem."; }
 
-            
-            string category = "";
-            string suggestion = "";
+            ResultTextBlock.Text = $"BMI: {bmi:F2} - {bmiCategory}";
+            TipTextBlock.Text = tip;
 
-            if (bmi < 18.5)
+            if (waist > 0 && hips > 0)
             {
-                category = "Niedowaga";
-                suggestion = "Zadbaj o zbilansowaną dietę i konsultuj się z dietetykiem.";
-            }
-            else if (bmi < 25)
-            {
-                category = "Waga prawidłowa";
-                suggestion = "Tak dalej! Jest OK.";
-            }
-            else if (bmi < 30)
-            {
-                category = "Nadwaga";
-                suggestion = "Zwróć uwagę na aktywność fizyczną i ogranicz cukry.";
+                double whr = waist / hips;
+                string whrCategory = "";
+
+                if (gender == "Kobieta")
+                    whrCategory = whr > 0.85 ? "Otyłość brzuszna" : "Otyłość pośladkowo-udowa";
+                else if (gender == "Mężczyzna")
+                    whrCategory = whr > 0.90 ? "Otyłość brzuszna" : "Otyłość pośladkowo-udowa";
+
+                WHRResultTextBlock.Text = $"WHR: {whr:F2} - {whrCategory}";
             }
             else
             {
-                category = "Otyłość";
-                suggestion = "Rozważ zwiększenie aktywności i zmianę nawyków żywieniowych.";
+                WHRResultTextBlock.Text = "WHR: Brak danych";
             }
 
-            
-            ResultTextBlock.Text = $"BMI: {bmi:F2} - {category}";
-            TipTextBlock.Text = suggestion;
+            double bmr = 0;
+            if (weightKg > 0 && heightCm > 0 && age > 0)
+            {
+                if (gender == "Mężczyzna")
+                    bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
+                else if (gender == "Kobieta")
+                    bmr = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
 
-            double waist = 0;
-            double hips = 0;
-            double.TryParse(WaistCmTextBox.Text, out waist);
-            double.TryParse(WaistCmTextBox.Text, out hips);
+                BMRResultTextBlock.Text = $"BMR: {bmr:F0} kcal/dzień";
+            }
+            else
+            {
+                BMRResultTextBlock.Text = "BMR: Brak danych";
+            }
         }
     }
 }
